@@ -122,37 +122,44 @@ const appendPageLinks = list => {
 
 };
 
+const doTheSearch = (input, list) => {
+  // All students names are lower case, so I want to make sure anything a user inputs is also lower case
+  const currentSearch = input.value.toLowerCase();
+  // This array will hold the results that match the search criteria
+  const customSearch = [];
+  // We loop through each of the student's items
+  list.forEach(listElem => {
+    // Getting hold on each student's name
+    const elemName = listElem.firstElementChild.children[1].textContent;
+    // If it contains a search text...
+    if (elemName.includes(currentSearch)) {
+      // ...it adds to the search results array
+      customSearch.push(listElem);
+    };
+  });
+  // We hide every student from the page to show search results
+  hideAllStudents();
+
+  // Some logic, after all
+  if (customSearch.length === 0) {
+    deletePagination();
+    // Displays a message that no results were found, click on a link to refresh the page
+    const errorMessage = `<h2>No students in our database met your criteria. Please, <a class="refresh" onclick="location.reload();">reload</a> and try a different search!</h2>`;
+    pageHeader.innerHTML = errorMessage;
+  } else {
+    showPage(customSearch, 1);
+    appendPageLinks(customSearch);
+  }
+};
+
 const addSearchCapability = (button, input, list) => {
   // On click onto button we make a search on the elements
   button.addEventListener('click', () => {
-    // All students names are lower case, so I want to make sure anything a user inputs is also lower case
-    const currentSearch = input.value.toLowerCase();
-    // This array will hold the results that match the search criteria
-    const customSearch = [];
-    // We loop through each of the student's items
-    list.forEach(listElem => {
-      // Getting hold on each student's name
-      const elemName = listElem.firstElementChild.children[1].textContent;
-      // If it contains a search text...
-      if (elemName.includes(currentSearch)) {
-        // ...it adds to the search results array
-        customSearch.push(listElem);
-      };
-    });
-    // We hide every student from the page to show search results
-    hideAllStudents();
-
-    // Some logic, after all
-    if (customSearch.length === 0) {
-      deletePagination();
-      // Displays a message that no results were found, click on a link to refresh the page
-      const errorMessage = `<h2>No students in our database met your criteria. Please, <a class="refresh" onclick="location.reload();">reload</a> and try a different search!</h2>`;
-      pageHeader.innerHTML = errorMessage;
-    } else {
-      showPage(customSearch, 1);
-      appendPageLinks(customSearch);
-    }
+    doTheSearch(input, list);
   });
+  input.addEventListener('keyup', () => {
+    doTheSearch(input, list);
+  })
 }
 
 // Appends search field to the top of the web page
