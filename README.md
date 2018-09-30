@@ -1,4 +1,5 @@
-# FSJS-p2-List-Pagination-and-Filtering
+# Project 2 - List Pagination and Filtering
+## Full-Stack Techdegree at www.teamtreehouse.com
 My Techdegree (Full-Stack JavaScript) Project 2 - List Pagination and Filtering
 
 Browser Testing : laptop
