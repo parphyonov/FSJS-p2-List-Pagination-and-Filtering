@@ -21,7 +21,9 @@ hideAllStudents();
 const page = document.querySelector('.page');
 // Page header will be used to insert search field
 const pageHeader = document.querySelector('.page-header');
-
+// This will be the message that appears when no search results are found
+// and hides if there are search results
+const disclaimer = document.querySelector('.disclaimer');
 // This variable sets the number of items to be shown on the page
 // FEEL FREE TO CHANGE IT for our paginator to display another number of items per page
 const paginationBreaker = 10;
@@ -122,6 +124,7 @@ const appendPageLinks = list => {
 
 };
 
+// This function is called from event listeners that trigger search
 const doTheSearch = (input, list) => {
   // All students names are lower case, so I want to make sure anything a user inputs is also lower case
   const currentSearch = input.value.toLowerCase();
@@ -144,9 +147,11 @@ const doTheSearch = (input, list) => {
   if (customSearch.length === 0) {
     deletePagination();
     // Displays a message that no results were found, click on a link to refresh the page
-    const errorMessage = `<h2>No students in our database met your criteria. Please, <a class="refresh" onclick="location.reload();">reload</a> and try a different search!</h2>`;
-    pageHeader.innerHTML = errorMessage;
+    disclaimer.style.display = 'block';
   } else {
+    // Removes the error message
+    disclaimer.style.display = 'none';
+    // Prints the found element and appends new pagination
     showPage(customSearch, 1);
     appendPageLinks(customSearch);
   }
@@ -171,6 +176,7 @@ const appendSearchField = () => {
   // Then creates input element
   const input = document.createElement('input');
   // Applies its pklaceholder text
+  input.autofocus = true;
   input.placeholder = 'Search for students...';
   // And a button element
   const button = document.createElement('button');
