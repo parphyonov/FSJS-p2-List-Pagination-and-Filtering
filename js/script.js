@@ -6,14 +6,16 @@ FSJS project 2 - List Filter and Pagination
 
 // The list of .student-item-s as our primary pagination target
 const students = document.querySelectorAll('.student-item');
+students.forEach(student => {
+  student.style.display = 'none';
+});
 // .page div will have some children appended later
 const page = document.querySelector('.page');
-// This one will be deleted each time page links are appended
-// I guess in case more items get added or sorted later in this project (someday:)
-const oldPagination = document.querySelector('.pagination');
 // This variable sets the number of items to be shown on the page
 // FEEL FREE TO CHANGE IT for our paginator to display another number of items per page
 const paginationBreaker = 10;
+// Page header will be used to insert search field
+const pageHeader = document.querySelector('.page-header');
 
 
 // The function accepts a list and a page number and uses CSS properties
@@ -39,13 +41,13 @@ const showPage = (list, page) => {
 
 };
 
-
 // Create and append the pagination links
 const appendPageLinks = list => {
 
   // Removes pagination if it already exists
-  if (oldPagination) {
-    oldPagination.remove();
+  const oldPages = document.querySelector('.pagination');
+  if (oldPages) {
+    oldPages.remove();
   }
 
   // This determines how many pages will be needed
@@ -98,7 +100,48 @@ const appendPageLinks = list => {
 
 };
 
+// Appends search field to the top of the web page
+const appendSearchField = () => {
+  // Creates div
+  const studentSearch = document.createElement('div');
+  // Adds class for styling purposes
+  studentSearch.className = 'student-search';
+  // Then creates input element
+  const input = document.createElement('input');
+  // Applies its pklaceholder text
+  input.placeholder = 'Search for students...';
+  // And a button element
+  const button = document.createElement('button');
+  // Setting its text as well
+  button.textContent = 'Search';
+  // Appends both elements to .student-search
+  studentSearch.appendChild(input);
+  studentSearch.appendChild(button);
+  // And appends .student-search to .page-header
+  // The search field is displayed, but no functionality YET
+  pageHeader.appendChild(studentSearch);
+
+  // On click onto button we make a search on the elements
+  button.addEventListener('click', () => {
+    const currentSearch = input.value.toLowerCase();
+    const customSearch = [];
+    students.forEach(student => {
+      const studentName = student.firstElementChild.children[1].textContent;
+      if (studentName.includes(currentSearch)) {
+        customSearch.push(student);
+      };
+    });
+    students.forEach(student => {
+      student.style.display = 'none';
+    });
+    showPage(customSearch, 1);
+    appendPageLinks(customSearch);
+  });
+};
+
+appendSearchField();
 // Shows first ten items when the page opens
 showPage(students, 1);
-// And then immediately appends functioning paginator to our web page
 appendPageLinks(students);
+// After all, we have the first page displayed on page opening
+document.querySelector('.pagination a').className = 'active';
