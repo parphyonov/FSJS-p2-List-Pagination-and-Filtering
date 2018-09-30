@@ -4,23 +4,28 @@ FSJS project 2 - List Filter and Pagination
 ******************************************/
 
 
-// Add variables that store DOM elements you will need to reference and/or manipulate
+// The list of .student-item-s as our primary pagination target
 const students = document.querySelectorAll('.student-item');
-// Stores a div with '.page' class for later use in functions
+// .page div will have some children appended later
 const page = document.querySelector('.page');
-// Removes old pagination in case the number of elements changes
+// This one will be deleted each time page links are appended
+// I guess in case more items get added or sorted later in this project (someday:)
 const oldPagination = document.querySelector('.pagination');
 // This variable sets the number of items to be shown on the page
+// FEEL FREE TO CHANGE IT for our paginator to display another number of items per page
 const paginationBreaker = 10;
 
 
-// Create a function to hide all of the items in the list excpet for the ten you want to show
-// Tip: Keep in mind that with a list of 54 studetns, the last page will only display four
+// The function accepts a list and a page number and uses CSS properties
+// of (allegedly) Nodes in this list to hide and show them depending on the page number.
 const showPage = (list, page) => {
 
   // These variables set the top and bottom range of possible indices
+  // E.g. page 3 results in 29 here
   const bottomElem = page * paginationBreaker - 1;
+  // ...and 20 here. After all these are INDECES, not actual ordinar places of .student.item
   const topElem = bottomElem - 9;
+
   // Loop through the array, check if a student's index within the page's boundaries and...
   list.forEach((listElem, listIndex) => {
     // leave it displayed if it is within
@@ -35,7 +40,7 @@ const showPage = (list, page) => {
 };
 
 
-// Create and append the pagination links - Creating a function that can do this is a good approach
+// Create and append the pagination links
 const appendPageLinks = list => {
 
   // Removes pagination if it already exists
@@ -72,12 +77,11 @@ const appendPageLinks = list => {
     ul.appendChild(li);
   }
 
-  // Add functionality to the pagination buttons so that they show and hide the correct items
-  // Tip: If you created a function above to show/hide list items, it could be helpful here
+  // !!! ::: Functionality ::: !!!
 
   // I had first introduced functionality through applying listener to each anchor,
-  // But then decided to implement this as it was more challenging to me
-  // And took some time.
+  // but then decided to implement this as it was more challenging for me
+  // to figure our how and took some time.
   paginationDiv.addEventListener('click', event => {
     const page = event.target;
     const pageToShow = parseInt(page.textContent);
@@ -94,8 +98,7 @@ const appendPageLinks = list => {
 
 };
 
-
-
-// Shows first ten items when the page loads
+// Shows first ten items when the page opens
 showPage(students, 1);
+// And then immediately appends functioning paginator to our web page
 appendPageLinks(students);
